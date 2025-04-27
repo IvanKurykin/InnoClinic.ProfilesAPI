@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Constants;
+
+namespace Domain.Entities;
 
 public sealed class Doctor : Person
 {
@@ -7,5 +9,5 @@ public sealed class Doctor : Person
     public string Specialization { get; set; } = string.Empty;
     public string Office { get; set; } = string.Empty;
     public string CareerStartYear { get; set; } = string.Empty;
-    public string Status { get; set; } = "At work";
+    public string Status { get; set; } = DoctorStatuses.AtWork;
 }
