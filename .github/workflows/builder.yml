@@ -1,0 +1,23 @@
+name: Profiles Service CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore InnoClinic.ProfilesAPI/InnoClinic.ProfilesAPI.sln -p:Configuration=Release
+      - name: Build
+        run: dotnet build InnoClinic.ProfilesAPI/InnoClinic.ProfilesAPI.sln --configuration Release
+      - name: Test
+        run: dotnet test InnoClinic.ProfilesAPI/InnoClinic.ProfilesAPI.sln --no-build --verbosity normal --configuration Release
