@@ -2,5 +2,5 @@
 
 public static class BlobConstants
 {
-    public static string ContainerName = "photos";
+    public const string ContainerName = "photos";
 }

@@ -8,6 +8,6 @@ public sealed class Patient
     public string? MiddleName { get; set; }
     public string PhoneNumber { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public DateTime DateOfBirth { get; set; }
+    public required DateTime DateOfBirth { get; set; }
     public string? PhotoUrl { get; set; } 
 }
