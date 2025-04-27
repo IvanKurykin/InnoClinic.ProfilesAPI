@@ -11,7 +11,7 @@ public class GetDoctorsQueryHandler(IDoctorRepository doctorRepository, IMapper 
 {
     public async Task<List<ResponseDoctorDto>> Handle(GetDoctorsQuery request, CancellationToken cancellationToken)
     {
-        var doctors = await doctorRepository.GetDoctorsAsync(cancellationToken);
+        var doctors = await doctorRepository.GetAllAsync(cancellationToken);
 
         return mapper.Map<List<ResponseDoctorDto>>(doctors);
     }

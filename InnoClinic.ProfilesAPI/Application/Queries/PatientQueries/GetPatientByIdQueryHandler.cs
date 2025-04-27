@@ -12,7 +12,7 @@ public class GetPatientByIdQueryHandler(IPatientRepository patientRepository, IM
 {
     public async Task<ResponsePatientDto> Handle(GetPatientByIdQuery request, CancellationToken cancellationToken)
     {
-        var patient = await patientRepository.GetPatientByIdAsync(request.Id, cancellationToken);
+        var patient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (patient is null) throw new PatientNotFoundException();
 

@@ -12,7 +12,7 @@ public class DeleteReceptionistCommandHandler(IReceptionistRepository receptioni
 {
     public async Task Handle(DeleteReceptionistCommand request, CancellationToken cancellationToken)
     {
-        var receptionist = await receptionistRepository.GetReceptionistByIdAsync(request.Id, cancellationToken);
+        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (receptionist is null) throw new ReceptionistNotFoundException();
 
@@ -21,6 +21,6 @@ public class DeleteReceptionistCommandHandler(IReceptionistRepository receptioni
             await blobStorageService.DeletePhotoAsync(receptionist.PhotoUrl);
         }
 
-        await receptionistRepository.DeleteReceptionistAsync(receptionist, cancellationToken);
+        await receptionistRepository.DeleteAsync(receptionist, cancellationToken);
     }
 }

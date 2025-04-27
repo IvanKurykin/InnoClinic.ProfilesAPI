@@ -12,7 +12,7 @@ public class GetDoctorByIdQueryHandler(IDoctorRepository doctorRepository, IMapp
 {
     public async Task<ResponseDoctorDto> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
     {
-        var doctor = await doctorRepository.GetDoctorByIdAsync(request.Id, cancellationToken);
+        var doctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (doctor is null) throw new DoctorNotFoundException();
 

@@ -24,7 +24,7 @@ public class CreatePatientCommandHandler(IPatientRepository patientRepository, I
             patient.PhotoUrl = photoUrl;
         }
 
-        var createdPatient = await patientRepository.CreatePatientAsync(patient, cancellationToken);
+        var createdPatient = await patientRepository.CreateAsync(patient, cancellationToken);
 
         return mapper.Map<ResponsePatientDto>(createdPatient);
     }
