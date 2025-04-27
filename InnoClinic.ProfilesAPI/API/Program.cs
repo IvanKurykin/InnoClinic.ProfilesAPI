@@ -1,3 +1,4 @@
+using API.Extensions;
 using Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCustomMetiatR();
+builder.Services.AddCustomValidation();
 
 builder.Services.AddInfrastructureLayerServices(builder.Configuration);
 
