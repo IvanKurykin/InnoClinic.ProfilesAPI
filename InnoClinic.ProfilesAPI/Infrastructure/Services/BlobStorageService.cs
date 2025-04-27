@@ -14,7 +14,7 @@ public class BlobStorageService(BlobServiceClient blobServiceClient) : IBlobStor
     {
         if (blobUrl is null) throw new BlobUrlIsNullException();
 
-        var (containerName, blobName) = BlobHelpers.ParseBlobUrl(blobUrl);
+        var (containerName, blobName) = BlobHelper.ParseBlobUrl(blobUrl);
         var blobClient = GetBlobClient(containerName, blobName);
 
         await blobClient.DeleteIfExistsAsync();
@@ -28,7 +28,7 @@ public class BlobStorageService(BlobServiceClient blobServiceClient) : IBlobStor
 
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
-        var blobClient = GetBlobClient(BlobConstants.ContainerName, BlobHelpers.GenerateBlobName(file.FileName));
+        var blobClient = GetBlobClient(BlobConstants.ContainerName, BlobHelper.GenerateBlobName(file.FileName));
 
         await UploadStreamAsync(blobClient, file.OpenReadStream());
 

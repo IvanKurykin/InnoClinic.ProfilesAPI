@@ -22,10 +22,10 @@ public class PatientRepository(ApplicationDbContext context) : IPatientRepositor
     }
 
     public async Task<Patient?> GetPatientByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Patients.FindAsync(id, cancellationToken);
+        await context.Patients.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
     public async Task<List<Patient>> GetPatientsAsync(CancellationToken cancellationToken = default) =>
-        await context.Patients.ToListAsync(cancellationToken);
+        await context.Patients.AsNoTracking().ToListAsync(cancellationToken);
 
     public async Task<Patient> UpdatePatientAsync(Patient patient, CancellationToken cancellationToken = default)
     {

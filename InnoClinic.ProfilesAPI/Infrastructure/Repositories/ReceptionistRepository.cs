@@ -21,10 +21,10 @@ public class ReceptionistRepository(ApplicationDbContext context) : IReceptionis
     }
 
     public async Task<Receptionist?> GetReceptionistByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Receptionists.FindAsync(id, cancellationToken);
+        await context.Receptionists.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
     public async Task<List<Receptionist>> GetReceptionistsAsync(CancellationToken cancellationToken = default) =>
-        await context.Receptionists.ToListAsync(cancellationToken);
+        await context.Receptionists.AsNoTracking().ToListAsync(cancellationToken);
 
     public async Task<Receptionist> UpdateReceptionistAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
     {

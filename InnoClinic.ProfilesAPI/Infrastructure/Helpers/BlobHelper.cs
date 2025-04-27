@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Helpers;
 
-public static class BlobHelpers
+public static class BlobHelper
 {
     public static (string containerName, string blobName) ParseBlobUrl(string blobUrl)
     {
