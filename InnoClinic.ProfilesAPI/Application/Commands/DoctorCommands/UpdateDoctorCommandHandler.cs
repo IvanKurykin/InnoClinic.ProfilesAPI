@@ -13,17 +13,19 @@ public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
 {
     public async Task<ResponseDoctorDto> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        var doctor = await doctorRepository.GetDoctorByIdAsync(request.Id, cancellationToken);
+        var existedDoctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (doctor is null) throw new DoctorNotFoundException();
+        if (existedDoctor is null) throw new DoctorNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
-            doctor.PhotoUrl = photoUrl;  
+            existedDoctor.PhotoUrl = photoUrl;  
         }
 
-        var updatedDoctor = await doctorRepository.UpdateAsync(doctor, cancellationToken);
+        mapper.Map(request.Dto, existedDoctor);
+
+        var updatedDoctor = await doctorRepository.UpdateAsync(existedDoctor, cancellationToken);
 
         return mapper.Map<ResponseDoctorDto>(updatedDoctor);
     }

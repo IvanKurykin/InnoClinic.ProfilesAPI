@@ -16,6 +16,7 @@ public class BlobStorageService : IBlobStorageService
     {
         this.blobServiceClient = blobServiceClient;
     }
+
     public async Task DeletePhotoAsync(string blobUrl)
     {
         if (blobUrl is null) throw new BlobUrlIsNullException();
@@ -42,6 +43,7 @@ public class BlobStorageService : IBlobStorageService
 
         return blobClient.Uri.ToString();
     }
+
     public async Task<Stream?> GetPhotoAsync(string blobUrl)
     {
         if (blobUrl is null) throw new BlobUrlIsNullException();

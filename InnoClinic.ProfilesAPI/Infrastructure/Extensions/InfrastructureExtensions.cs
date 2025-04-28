@@ -21,8 +21,7 @@ public static class InfrastructureExtensions
            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddSingleton(x =>
-            new BlobServiceClient(configuration["AzureStorage:ConnectionString"]));
-
+            new BlobServiceClient(configuration.GetConnectionString("AzureConnection"))); 
 
         services.AddScoped<IBlobStorageService, BlobStorageService>();
 

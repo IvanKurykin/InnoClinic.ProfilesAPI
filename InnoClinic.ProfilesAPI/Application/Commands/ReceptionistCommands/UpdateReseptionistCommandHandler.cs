@@ -13,17 +13,19 @@ public class UpdateReceptionistCommandHandler(IReceptionistRepository receptioni
 {
     public async Task<ResponseReceptionistDto> Handle(UpdateReceptionistCommand request, CancellationToken cancellationToken)
     {
-        var receptionist = await receptionistRepository.GetReceptionistByIdAsync(request.Id, cancellationToken);
+        var existedReceptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (receptionist is null) throw new ReceptionistNotFoundException();
+        if (existedReceptionist is null) throw new ReceptionistNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
-            receptionist.PhotoUrl = photoUrl;  
+            existedReceptionist.PhotoUrl = photoUrl;  
         }
 
-        var updatedReceptionist = await receptionistRepository.UpdateAsync(receptionist, cancellationToken);
+        mapper.Map(request.Dto, existedReceptionist);
+
+        var updatedReceptionist = await receptionistRepository.UpdateAsync(existedReceptionist, cancellationToken);
 
         return mapper.Map<ResponseReceptionistDto>(updatedReceptionist);
     }

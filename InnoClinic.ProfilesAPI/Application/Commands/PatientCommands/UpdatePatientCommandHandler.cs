@@ -13,17 +13,19 @@ public class UpdatePatientCommandHandler(IPatientRepository patientRepository, I
 {
     public async Task<ResponsePatientDto> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await patientRepository.GetPatientByIdAsync(request.Id, cancellationToken);
+        var existedPatient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (patient is null) throw new PatientNotFoundException(); 
+        if (existedPatient is null) throw new PatientNotFoundException(); 
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
-            patient.PhotoUrl = photoUrl; 
+            existedPatient.PhotoUrl = photoUrl; 
         }
 
-        var updatedPatient = await patientRepository.UpdateAsync(patient, cancellationToken);
+        mapper.Map(request.Dto, existedPatient);
+
+        var updatedPatient = await patientRepository.UpdateAsync(existedPatient, cancellationToken);
 
         return mapper.Map<ResponsePatientDto>(updatedPatient);
     }
