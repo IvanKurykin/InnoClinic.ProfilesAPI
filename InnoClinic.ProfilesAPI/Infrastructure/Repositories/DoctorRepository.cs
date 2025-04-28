@@ -4,7 +4,5 @@ using Infrastructure.Context;
 
 namespace Infrastructure.Repositories;
 
-public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
-{
-    public DoctorRepository(ApplicationDbContext context) : base(context) { }
-}
+public class DoctorRepository(ApplicationDbContext context) : BaseRepository<Doctor>(context), IDoctorRepository
+{ }

@@ -4,7 +4,5 @@ using Infrastructure.Context;
 
 namespace Infrastructure.Repositories;
 
-public class ReceptionistRepository : BaseRepository<Receptionist>, IReceptionistRepository
-{
-    public ReceptionistRepository(ApplicationDbContext context) : base(context) { }
-}
+public class ReceptionistRepository(ApplicationDbContext context) : BaseRepository<Receptionist>(context), IReceptionistRepository
+{ }
