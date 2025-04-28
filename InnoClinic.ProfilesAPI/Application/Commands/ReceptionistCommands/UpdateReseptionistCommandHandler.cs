@@ -23,7 +23,7 @@ public class UpdateReceptionistCommandHandler(IReceptionistRepository receptioni
             receptionist.PhotoUrl = photoUrl;  
         }
 
-        var updatedReceptionist = await receptionistRepository.UpdateReceptionistAsync(receptionist, cancellationToken);
+        var updatedReceptionist = await receptionistRepository.UpdateAsync(receptionist, cancellationToken);
 
         return mapper.Map<ResponseReceptionistDto>(updatedReceptionist);
     }

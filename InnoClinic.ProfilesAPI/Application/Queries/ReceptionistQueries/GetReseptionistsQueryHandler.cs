@@ -11,7 +11,7 @@ public class GetReceptionistsQueryHandler(IReceptionistRepository receptionistRe
 {
     public async Task<List<ResponseReceptionistDto>> Handle(GetReceptionistsQuery request, CancellationToken cancellationToken)
     {
-        var receptionists = await receptionistRepository.GetReceptionistsAsync(cancellationToken);
+        var receptionists = await receptionistRepository.GetAllAsync(cancellationToken);
 
         return mapper.Map<List<ResponseReceptionistDto>>(receptionists);
     }

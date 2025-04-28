@@ -24,7 +24,7 @@ public class CreateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
             doctor.PhotoUrl = photoUrl;
         }
 
-        var createdDoctor = await doctorRepository.CreateDoctorAsync(doctor, cancellationToken);
+        var createdDoctor = await doctorRepository.CreateAsync(doctor, cancellationToken);
 
         return mapper.Map<ResponseDoctorDto>(createdDoctor);
     }

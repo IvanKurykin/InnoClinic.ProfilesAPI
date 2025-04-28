@@ -7,26 +7,26 @@ namespace Infrastructure.Repositories;
 
 public class ReceptionistRepository(ApplicationDbContext context) : IReceptionistRepository
 {
-    public async Task<Receptionist> CreateReceptionistAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
+    public async Task<Receptionist> CreateAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
     {
         await context.Receptionists.AddAsync(receptionist, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
         return receptionist;
     }
 
-    public async Task DeleteReceptionistAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
     {
         context.Receptionists.Remove(receptionist);
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Receptionist?> GetReceptionistByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+    public async Task<Receptionist?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         await context.Receptionists.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
-    public async Task<List<Receptionist>> GetReceptionistsAsync(CancellationToken cancellationToken = default) =>
+    public async Task<List<Receptionist>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await context.Receptionists.AsNoTracking().ToListAsync(cancellationToken);
 
-    public async Task<Receptionist> UpdateReceptionistAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
+    public async Task<Receptionist> UpdateAsync(Receptionist receptionist, CancellationToken cancellationToken = default)
     {
         context.Receptionists.Update(receptionist);
         await context.SaveChangesAsync(cancellationToken);

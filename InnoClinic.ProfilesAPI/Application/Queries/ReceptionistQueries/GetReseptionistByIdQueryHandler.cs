@@ -12,7 +12,7 @@ public class GetReceptionistByIdQueryHandler(IReceptionistRepository receptionis
 {
     public async Task<ResponseReceptionistDto> Handle(GetReceptionistByIdQuery request, CancellationToken cancellationToken)
     {
-        var receptionist = await receptionistRepository.GetReceptionistByIdAsync(request.Id, cancellationToken);
+        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (receptionist is null) throw new ReceptionistNotFoundException();
 

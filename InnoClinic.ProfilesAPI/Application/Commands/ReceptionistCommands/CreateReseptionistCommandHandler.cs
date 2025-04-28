@@ -24,7 +24,7 @@ public class CreateReceptionistCommandHandler(IReceptionistRepository receptioni
             receptionist.PhotoUrl = photoUrl;
         }
 
-        var createdReceptionist = await receptionistRepository.CreateReceptionistAsync(receptionist, cancellationToken);
+        var createdReceptionist = await receptionistRepository.CreateAsync(receptionist, cancellationToken);
 
         return mapper.Map<ResponseReceptionistDto>(createdReceptionist);
     }

@@ -23,7 +23,7 @@ public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
             doctor.PhotoUrl = photoUrl;  
         }
 
-        var updatedDoctor = await doctorRepository.UpdateDoctorAsync(doctor, cancellationToken);
+        var updatedDoctor = await doctorRepository.UpdateAsync(doctor, cancellationToken);
 
         return mapper.Map<ResponseDoctorDto>(updatedDoctor);
     }

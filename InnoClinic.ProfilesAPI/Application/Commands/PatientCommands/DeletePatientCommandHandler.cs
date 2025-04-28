@@ -12,7 +12,7 @@ public class DeletePatientCommandHandler(IPatientRepository patientRepository, I
 {
     public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await patientRepository.GetPatientByIdAsync(request.Id, cancellationToken);
+        var patient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (patient is null) throw new PatientNotFoundException();
 
@@ -21,6 +21,6 @@ public class DeletePatientCommandHandler(IPatientRepository patientRepository, I
             await blobStorageService.DeletePhotoAsync(patient.PhotoUrl);
         }
 
-        await patientRepository.DeletePatientAsync(patient, cancellationToken);
+        await patientRepository.DeleteAsync(patient, cancellationToken);
     }
 }
