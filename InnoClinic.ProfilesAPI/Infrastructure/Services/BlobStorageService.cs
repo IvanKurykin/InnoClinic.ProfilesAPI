@@ -60,23 +60,6 @@ public class BlobStorageService : IBlobStorageService
         return downloadInfo.Value.Content;
     }
 
-    public async Task<Stream?> GetPhotoAsync(string blobUrl)
-    {
-        if (blobUrl is null) throw new BlobUrlIsNullException();
-
-        var (containerName, blobName) = BlobHelper.ParseBlobUrl(blobUrl);
-        var blobClient = GetBlobClient(containerName, blobName);
-
-        var blobExists = await blobClient.ExistsAsync();
-        if (!blobExists)
-        {
-            return null;
-        }
-
-        var downloadInfo = await blobClient.DownloadAsync();
-        return downloadInfo.Value.Content;
-    }
-
     private BlobClient GetBlobClient(string containerName, string blobName)
     {
         var containerClient = blobServiceClient.GetBlobContainerClient(containerName);

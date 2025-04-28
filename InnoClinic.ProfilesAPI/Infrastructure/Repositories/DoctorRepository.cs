@@ -1,35 +1,24 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class DoctorRepository(ApplicationDbContext context) : IDoctorRepository
+public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
 {
-    public async Task<Doctor> CreateAsync(Doctor doctor, CancellationToken cancellationToken = default)
-    {
-        await context.Doctors.AddAsync(doctor, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
-        return doctor;
-    }
+    public DoctorRepository(ApplicationDbContext context) : base(context) { }
 
-    public async Task DeleteAsync(Doctor doctor, CancellationToken cancellationToken = default)
-    {
-        context.Doctors.Remove(doctor);
-        await context.SaveChangesAsync(cancellationToken);
-    }
+    public async Task<Doctor> CreateAsync(Doctor doctor, CancellationToken cancellationToken = default) =>
+        await CreateEntityAsync(doctor, cancellationToken);
+    
+    public async Task DeleteAsync(Doctor doctor, CancellationToken cancellationToken = default) =>
+        await DeleteEntityAsync(doctor, cancellationToken);
 
     public async Task<Doctor?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Doctors.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+        await GetEntityByIdAsync(id, cancellationToken);
 
     public async Task<List<Doctor>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await context.Doctors.AsNoTracking().ToListAsync(cancellationToken);
-
-    public async Task<Doctor> UpdateAsync(Doctor doctor, CancellationToken cancellationToken = default)
-    {
-        context.Doctors.Update(doctor);
-        await context.SaveChangesAsync(cancellationToken);
-        return doctor;
-    }
+        await GetAllEntitiesAsync(cancellationToken);
+    public async Task<Doctor> UpdateAsync(Doctor doctor, CancellationToken cancellationToken = default) =>
+        await UpdateEntityAsync(doctor, cancellationToken);
 }
