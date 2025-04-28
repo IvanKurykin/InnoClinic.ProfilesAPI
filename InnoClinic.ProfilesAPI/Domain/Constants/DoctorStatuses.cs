@@ -2,5 +2,5 @@
 
 public static class DoctorStatuses
 {
-    public const string AtWork = "AtWork";
+    public const string AtWork = "At work";
 }
