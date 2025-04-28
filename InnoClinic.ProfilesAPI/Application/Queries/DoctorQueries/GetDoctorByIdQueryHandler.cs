@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Doctor;
 using Application.Exceptions.NotFoundExceptions;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
@@ -12,7 +13,7 @@ public class GetDoctorByIdQueryHandler(IDoctorRepository doctorRepository, IMapp
 {
     public async Task<ResponseDoctorDto> Handle(GetDoctorByIdQuery request, CancellationToken cancellationToken)
     {
-        var doctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
+        var doctor = await doctorRepository.GetByIdAsync(request.Id, TrackChanges.UnTrace, cancellationToken);
 
         if (doctor is null) throw new DoctorNotFoundException();
 

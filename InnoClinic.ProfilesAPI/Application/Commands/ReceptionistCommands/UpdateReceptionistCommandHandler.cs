@@ -2,6 +2,7 @@
 using Application.Exceptions.NotFoundExceptions;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
@@ -13,25 +14,25 @@ public class UpdateReceptionistCommandHandler(IReceptionistRepository receptioni
 {
     public async Task<ResponseReceptionistDto> Handle(UpdateReceptionistCommand request, CancellationToken cancellationToken)
     {
-        var existedReceptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
+        var existingReceptionist = await receptionistRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
 
-        if (existedReceptionist is null) throw new ReceptionistNotFoundException();
+        if (existingReceptionist is null) throw new ReceptionistNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
 
-            if (!string.IsNullOrEmpty(existedReceptionist.PhotoUrl))
+            if (!string.IsNullOrEmpty(existingReceptionist.PhotoUrl))
             {
-                await blobStorageService.DeletePhotoAsync(existedReceptionist.PhotoUrl);
+                await blobStorageService.DeletePhotoAsync(existingReceptionist.PhotoUrl);
             }
 
-            existedReceptionist.PhotoUrl = photoUrl;  
+            existingReceptionist.PhotoUrl = photoUrl;  
         }
 
-        mapper.Map(request.Dto, existedReceptionist);
+        mapper.Map(request.Dto, existingReceptionist);
 
-        var updatedReceptionist = await receptionistRepository.UpdateAsync(existedReceptionist, cancellationToken);
+        var updatedReceptionist = await receptionistRepository.UpdateAsync(existingReceptionist, cancellationToken);
 
         return mapper.Map<ResponseReceptionistDto>(updatedReceptionist);
     }

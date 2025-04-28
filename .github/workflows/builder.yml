@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: ["main"]
 
+env:
+  DEFAULT_CONNECTION: ${{ secrets.DEFAULT_CONNECTION }}
+  AZURE_CONNECTION: ${{ secrets.AZURE_CONNECTION }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

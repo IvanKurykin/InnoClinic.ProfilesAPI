@@ -2,6 +2,7 @@
 using Application.Exceptions.NotFoundExceptions;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
@@ -13,25 +14,25 @@ public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
 {
     public async Task<ResponseDoctorDto> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        var existedDoctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
+        var existingDoctor = await doctorRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
 
-        if (existedDoctor is null) throw new DoctorNotFoundException();
+        if (existingDoctor is null) throw new DoctorNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
 
-            if (!string.IsNullOrEmpty(existedDoctor.PhotoUrl))
+            if (!string.IsNullOrEmpty(existingDoctor.PhotoUrl))
             {
-                await blobStorageService.DeletePhotoAsync(existedDoctor.PhotoUrl);
+                await blobStorageService.DeletePhotoAsync(existingDoctor.PhotoUrl);
             }
 
-            existedDoctor.PhotoUrl = photoUrl;  
+            existingDoctor.PhotoUrl = photoUrl;  
         }
 
-        mapper.Map(request.Dto, existedDoctor);
+        mapper.Map(request.Dto, existingDoctor);
 
-        var updatedDoctor = await doctorRepository.UpdateAsync(existedDoctor, cancellationToken);
+        var updatedDoctor = await doctorRepository.UpdateAsync(existingDoctor, cancellationToken);
 
         return mapper.Map<ResponseDoctorDto>(updatedDoctor);
     }

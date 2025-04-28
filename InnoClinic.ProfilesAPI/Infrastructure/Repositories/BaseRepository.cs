@@ -29,8 +29,14 @@ public class BaseRepository<T> : IRepository<T> where T : class
     public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
          await context.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
 
-    public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-       await context.Set<T>().FirstOrDefaultAsync(entity => EF.Property<Guid>(entity, "Id") == id, cancellationToken);
+    public async Task<T?> GetByIdAsync(Guid id, bool trackChanges, CancellationToken cancellationToken = default)
+    {
+        var query = context.Set<T>().AsQueryable();
+
+        if (!trackChanges) query = query.AsNoTracking();
+
+        return await query.FirstOrDefaultAsync(entity => EF.Property<Guid>(entity, "Id") == id, cancellationToken);
+    }
 
     public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {

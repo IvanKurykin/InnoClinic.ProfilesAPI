@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Receptionist;
 using Application.Exceptions.NotFoundExceptions;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
@@ -12,7 +13,7 @@ public class GetReceptionistByIdQueryHandler(IReceptionistRepository receptionis
 {
     public async Task<ResponseReceptionistDto> Handle(GetReceptionistByIdQuery request, CancellationToken cancellationToken)
     {
-        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
+        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, TrackChanges.UnTrace, cancellationToken);
 
         if (receptionist is null) throw new ReceptionistNotFoundException();
 
