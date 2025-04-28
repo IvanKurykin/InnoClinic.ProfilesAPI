@@ -20,6 +20,12 @@ public class UpdatePatientCommandHandler(IPatientRepository patientRepository, I
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
+
+            if (!string.IsNullOrEmpty(existedPatient.PhotoUrl))
+            {
+                await blobStorageService.DeletePhotoAsync(existedPatient.PhotoUrl);
+            }
+
             existedPatient.PhotoUrl = photoUrl; 
         }
 

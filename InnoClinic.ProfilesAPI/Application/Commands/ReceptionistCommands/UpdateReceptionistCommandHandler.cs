@@ -20,6 +20,12 @@ public class UpdateReceptionistCommandHandler(IReceptionistRepository receptioni
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
+
+            if (!string.IsNullOrEmpty(existedReceptionist.PhotoUrl))
+            {
+                await blobStorageService.DeletePhotoAsync(existedReceptionist.PhotoUrl);
+            }
+
             existedReceptionist.PhotoUrl = photoUrl;  
         }
 

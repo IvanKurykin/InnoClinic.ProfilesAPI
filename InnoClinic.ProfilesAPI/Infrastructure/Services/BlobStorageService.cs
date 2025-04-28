@@ -29,7 +29,7 @@ public class BlobStorageService : IBlobStorageService
 
     public async Task<string?> UploadPhotoAsync(IFormFile file)
     { 
-        if (file  is null) throw new FileIsNullException();
+        if (file is null) throw new FileIsNullException();
 
         var containerClient = blobServiceClient.GetBlobContainerClient(BlobConstants.ContainerName);
 

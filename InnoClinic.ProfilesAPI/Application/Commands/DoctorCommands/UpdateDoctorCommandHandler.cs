@@ -20,6 +20,12 @@ public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
+
+            if (!string.IsNullOrEmpty(existedDoctor.PhotoUrl))
+            {
+                await blobStorageService.DeletePhotoAsync(existedDoctor.PhotoUrl);
+            }
+
             existedDoctor.PhotoUrl = photoUrl;  
         }
 
