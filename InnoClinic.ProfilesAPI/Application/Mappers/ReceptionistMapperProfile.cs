@@ -6,7 +6,7 @@ namespace Application.Mappers;
 
 public class ReceptionistMapperProfile : Profile
 {
-    ReceptionistMapperProfile()
+    public ReceptionistMapperProfile()
     {
         CreateMap<RequestReceptionistDto, Receptionist>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))

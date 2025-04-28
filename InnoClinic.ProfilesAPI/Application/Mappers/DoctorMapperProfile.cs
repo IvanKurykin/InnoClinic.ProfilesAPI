@@ -6,7 +6,7 @@ namespace Application.Mappers;
 
 public class DoctorMapperProfile : Profile
 {
-    DoctorMapperProfile()
+    public DoctorMapperProfile()
     {
         CreateMap<RequestDoctorDto, Doctor>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))

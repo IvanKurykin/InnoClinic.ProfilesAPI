@@ -21,7 +21,7 @@ public class DoctorRepository(ApplicationDbContext context) : IDoctorRepository
     }
 
     public async Task<Doctor?> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Doctors.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+        await context.Doctors.FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
     public async Task<List<Doctor>> GetDoctorsAsync(CancellationToken cancellationToken = default) =>
         await context.Doctors.AsNoTracking().ToListAsync(cancellationToken);

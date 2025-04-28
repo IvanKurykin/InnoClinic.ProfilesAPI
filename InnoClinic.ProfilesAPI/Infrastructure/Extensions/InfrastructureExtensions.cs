@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Application.Interfaces;
 using Application.Extensions;
+using Application.Interfaces;
+using Azure.Storage.Blobs;
 using Domain.Interfaces;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
@@ -18,6 +19,10 @@ public static class InfrastructureExtensions
     {
         services.AddDbContext<ApplicationDbContext>(options =>
            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddSingleton(x =>
+            new BlobServiceClient(configuration["AzureStorage:ConnectionString"]));
+
 
         services.AddScoped<IBlobStorageService, BlobStorageService>();
 

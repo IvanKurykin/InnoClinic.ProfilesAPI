@@ -1,22 +1,21 @@
 ﻿using Application.DTO.Doctor;
-using Application.Exceptions;
+using Application.Exceptions.NotFoundExceptions;
 using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Commands.DoctorCommands;
 
-public record UpdateDoctorCommand(RequestDoctorDto Dto) : IRequest<ResponseDoctorDto>;
+public record UpdateDoctorCommand(Guid Id, RequestDoctorDto Dto) : IRequest<ResponseDoctorDto>;
 
 public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMapper mapper, IBlobStorageService blobStorageService) : IRequestHandler<UpdateDoctorCommand, ResponseDoctorDto>
 {
     public async Task<ResponseDoctorDto> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        if (request.Dto is null) throw new DtoIsNullException();
+        var doctor = await doctorRepository.GetDoctorByIdAsync(request.Id, cancellationToken);
 
-        var doctor = mapper.Map<Doctor>(request.Dto);
+        if (doctor is null) throw new DoctorNotFoundException();
 
         if (request.Dto.Photo is not null)
         {

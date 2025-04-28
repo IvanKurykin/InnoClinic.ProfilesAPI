@@ -1,22 +1,21 @@
 ﻿using Application.DTO.Receptionist;
-using Application.Exceptions;
+using Application.Exceptions.NotFoundExceptions;
 using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Commands.ReceptionistCommands;
 
-public record UpdateReceptionistCommand(RequestReceptionistDto Dto) : IRequest<ResponseReceptionistDto>;
+public record UpdateReceptionistCommand(Guid Id, RequestReceptionistDto Dto) : IRequest<ResponseReceptionistDto>;
 
 public class UpdateReceptionistCommandHandler(IReceptionistRepository receptionistRepository, IMapper mapper, IBlobStorageService blobStorageService) : IRequestHandler<UpdateReceptionistCommand, ResponseReceptionistDto>
 {
     public async Task<ResponseReceptionistDto> Handle(UpdateReceptionistCommand request, CancellationToken cancellationToken)
     {
-        if (request.Dto is null) throw new DtoIsNullException();
+        var receptionist = await receptionistRepository.GetReceptionistByIdAsync(request.Id, cancellationToken);
 
-        var receptionist = mapper.Map<Receptionist>(request.Dto);
+        if (receptionist is null) throw new ReceptionistNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
