@@ -22,7 +22,7 @@ public class DoctorController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("{id}")]
     public async Task<ActionResult<ResponseDoctorDto>> UpdateDoctorAsync([FromRoute] Guid id, [FromForm] RequestDoctorDto dto, CancellationToken cancellationToken) =>
-        Ok(await mediator.Send(new  UpdateDoctorCommand(id, dto), cancellationToken));
+        Ok(await mediator.Send(new UpdateDoctorCommand(id, dto), cancellationToken));
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
