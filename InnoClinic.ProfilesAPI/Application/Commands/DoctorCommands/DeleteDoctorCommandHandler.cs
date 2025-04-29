@@ -12,7 +12,7 @@ public class DeleteDoctorCommandHandler(IDoctorRepository doctorRepository, IBlo
 {
     public async Task Handle(DeleteDoctorCommand request, CancellationToken cancellationToken)
     {
-        var doctor = await doctorRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
+        var doctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (doctor is null) throw new DoctorNotFoundException();
 
