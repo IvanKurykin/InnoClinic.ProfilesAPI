@@ -4,6 +4,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using FluentAssertions;
 using Moq;
 using UnitTests.TestCases;
 
@@ -12,23 +13,30 @@ namespace UnitTests.CommandsAndQueries.DoctorTests;
 public class UpdateDoctorCommandHandlerTests
 {
     [Fact]
-    public async Task HandleValidRequestUpdatesDoctor()
+    public async Task Handle_WithNewPhoto_UpdatesDoctorPhoto()
     {
         var mockRepo = new Mock<IDoctorRepository>();
         var mockMapper = new Mock<IMapper>();
-        var mockBlobService = new Mock<IBlobStorageService>();
+        var mockBlob = new Mock<IBlobStorageService>();
 
-        var existingDoctor = new Doctor { Id = Guid.NewGuid(), FirstName = CQTestCases.DoctorsFirstName, DateOfBirth = DateTime.MinValue};
-        var dto = new RequestDoctorDto { FirstName = CQTestCases.DoctorsNewFirstName };
-        var responseDto = new ResponseDoctorDto { FirstName = CQTestCases.DoctorsNewFirstName };
+        var doctorId = Guid.NewGuid();
+        var formFile = CQTestCases.GetTestFormFile();
+        var dto = new RequestDoctorDto { Photo = formFile };
+        var existing = new Doctor { Id = doctorId, PhotoUrl = CQTestCases.DoctorsOldPhotoUrl, DateOfBirth = DateTime.MinValue };
+        var updated = new Doctor { Id = doctorId, PhotoUrl = CQTestCases.DoctorsNewPhotoUrl, DateOfBirth = DateTime.MinValue };
+        var response = new ResponseDoctorDto { PhotoUrl = CQTestCases.DoctorsNewPhotoUrl };
 
-        mockRepo.Setup(r => r.GetByIdAsync(existingDoctor.Id, default)).ReturnsAsync(existingDoctor);
-        mockMapper.Setup(m => m.Map<ResponseDoctorDto>(existingDoctor)).Returns(responseDto);
+        mockRepo.Setup(r => r.GetByIdAsync(doctorId, It.IsAny<CancellationToken>())).ReturnsAsync(existing);
+        mockBlob.Setup(b => b.UploadPhotoAsync(formFile)).ReturnsAsync(CQTestCases.DoctorsNewPhotoUrl);
+        mockRepo.Setup(r => r.UpdateAsync(existing, It.IsAny<CancellationToken>())).ReturnsAsync(updated);
+        mockMapper.Setup(m => m.Map<ResponseDoctorDto>(updated)).Returns(response);
 
-        var handler = new UpdateDoctorCommandHandler(mockRepo.Object, mockMapper.Object, mockBlobService.Object);
+        var handler = new UpdateDoctorCommandHandler(mockRepo.Object, mockMapper.Object, mockBlob.Object);
 
-        var result = await handler.Handle(new UpdateDoctorCommand(existingDoctor.Id, dto), default);
+        var result = await handler.Handle(new UpdateDoctorCommand(doctorId, dto), default);
 
-        mockRepo.Verify(r => r.UpdateAsync(existingDoctor, default), Times.Once);
+        mockBlob.Verify(b => b.UploadPhotoAsync(formFile), Times.Once);
+        mockBlob.Verify(b => b.DeletePhotoAsync(CQTestCases.DoctorsOldPhotoUrl), Times.Once);
+        result.PhotoUrl.Should().Be(CQTestCases.DoctorsNewPhotoUrl);
     }
 }

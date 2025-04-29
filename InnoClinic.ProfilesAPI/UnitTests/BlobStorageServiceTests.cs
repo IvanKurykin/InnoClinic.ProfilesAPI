@@ -19,7 +19,7 @@ public class BlobStorageServiceTests
     }
 
     [Fact]
-    public async Task UploadPhotoAsync_ValidFile_ReturnsBlobUrl()
+    public async Task UploadPhotoAsyncValidFileReturnsBlobUrl()
     {
         var fileMock = new Mock<IFormFile>();
         fileMock.Setup(f => f.FileName).Returns("test.jpg");
@@ -54,7 +54,7 @@ public class BlobStorageServiceTests
     }
 
     [Fact]
-    public async Task GetPhotoAsync_BlobDoesNotExist_ReturnsNull()
+    public async Task GetPhotoAsyncBlobDoesNotExistReturnsNull()
     {
         var blobUrl = "https://test.blob.core.windows.net/container/nonexistent.jpg";
         var containerClientMock = new Mock<BlobContainerClient>();
