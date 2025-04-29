@@ -34,7 +34,7 @@ public class PatientRepositoryTests
     {
         var patient = RepositoryTestCases.GetTestPatient();
 
-        await _context.Patients.AddAsync(patient);
+        await _context.Patients!.AddAsync(patient);
         await _context.SaveChangesAsync();
 
         var result = await _repository.GetByIdAsync(patient.Id);
@@ -47,7 +47,7 @@ public class PatientRepositoryTests
     {
         var patient = RepositoryTestCases.GetTestPatient();
 
-        await _context.Patients.AddAsync(patient);
+        await _context.Patients!.AddAsync(patient);
         await _context.SaveChangesAsync();
 
         await _repository.DeleteAsync(patient);
@@ -60,7 +60,7 @@ public class PatientRepositoryTests
     {
         var patient = RepositoryTestCases.GetTestPatient();
 
-        await _context.Patients.AddAsync(patient);
+        await _context.Patients!.AddAsync(patient);
         await _context.SaveChangesAsync();
 
         patient.FirstName = "Updated Name";
@@ -76,7 +76,7 @@ public class PatientRepositoryTests
         var patient1 = RepositoryTestCases.GetTestPatient();
         var patient2 = RepositoryTestCases.GetTestPatient();
 
-        await _context.Patients.AddAsync(patient1);
+        await _context.Patients!.AddAsync(patient1);
         await _context.Patients.AddAsync(patient2);
         await _context.SaveChangesAsync();
 

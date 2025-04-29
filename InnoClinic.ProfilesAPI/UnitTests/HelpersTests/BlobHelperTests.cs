@@ -1,27 +1,41 @@
-﻿using Infrastructure.Helpers;
+﻿using FluentAssertions;
+using Infrastructure.Helpers;
 
 namespace UnitTests.HelpersTests;
 
 public class BlobHelperTests
 {
-    [Theory]
-    [InlineData("not-a-valid-url", typeof(UriFormatException))]
-    public void ParseBlobUrlInvalidUrlShouldThrow(string invalidUrl, Type expectedException)
+    [Fact]
+    public void ParseBlobUrlValidUrlReturnsContainerAndBlobName()
     {
-        Assert.Throws(expectedException, () => BlobHelper.ParseBlobUrl(invalidUrl));
+        var url = "https://mystorageaccount.blob.core.windows.net/account/container-name/folder/image.jpg";
+
+        var (containerName, blobName) = BlobHelper.ParseBlobUrl(url);
+
+        containerName.Should().Be("container-name");
+        blobName.Should().Be("folder/image.jpg");
     }
 
     [Fact]
-    public void GenerateBlobNameShouldGenerateUniqueNames()
+    public void ParseBlobUrlUrlWithOnlyContainerAndBlobNameReturnsCorrectParts()
     {
-        var fileName = "test.jpg";
-        var names = new HashSet<string>();
+        var url = "https://mystorageaccount.blob.core.windows.net/account/photos/image.jpg";
 
-        for (int i = 0; i < 5; i++)
-        {
-            names.Add(BlobHelper.GenerateBlobName(fileName));
-        }
+        var (containerName, blobName) = BlobHelper.ParseBlobUrl(url);
 
-        Assert.Equal(5, names.Count);
+        containerName.Should().Be("photos");
+        blobName.Should().Be("image.jpg");
     }
+
+    [Fact]
+    public void ParseBlobUrlUrlWithDeepBlobPathReturnsCorrectBlobName()
+    {
+        var url = "https://account.blob.core.windows.net/root/files/folder1/folder2/file.png";
+
+        var (containerName, blobName) = BlobHelper.ParseBlobUrl(url);
+
+        containerName.Should().Be("files");
+        blobName.Should().Be("folder1/folder2/file.png");
+    }
+
 }

@@ -37,7 +37,7 @@ public class ReceptionistRepositoryTests
     {
         var receptionist = RepositoryTestCases.GetTestReceptionist();
 
-        await _context.Receptionists.AddAsync(receptionist);
+        await _context.Receptionists!.AddAsync(receptionist);
         await _context.SaveChangesAsync();
 
         var result = await _repository.GetByIdAsync(receptionist.Id);
@@ -50,7 +50,7 @@ public class ReceptionistRepositoryTests
     {
         var receptionist = RepositoryTestCases.GetTestReceptionist();
 
-        await _context.Receptionists.AddAsync(receptionist);
+        await _context.Receptionists!.AddAsync(receptionist);
         await _context.SaveChangesAsync();
 
         await _repository.DeleteAsync(receptionist);
@@ -63,7 +63,7 @@ public class ReceptionistRepositoryTests
     {
         var receptionist = RepositoryTestCases.GetTestReceptionist();
 
-        await _context.Receptionists.AddAsync(receptionist);
+        await _context.Receptionists!.AddAsync(receptionist);
         await _context.SaveChangesAsync();
 
         receptionist.FirstName = "Updated Name";
@@ -81,7 +81,7 @@ public class ReceptionistRepositoryTests
 
         receptionist2.Id = Guid.NewGuid();
 
-        await _context.Receptionists.AddAsync(receptionist1);
+        await _context.Receptionists!.AddAsync(receptionist1);
         await _context.Receptionists.AddAsync(receptionist2);
         await _context.SaveChangesAsync();
 
