@@ -14,7 +14,7 @@ public class UpdatePatientCommandHandler(IPatientRepository patientRepository, I
 {
     public async Task<ResponsePatientDto> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-        var existingPatient = await patientRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
+        var existingPatient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingPatient is null) throw new PatientNotFoundException(); 
 

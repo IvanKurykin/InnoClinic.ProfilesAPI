@@ -13,7 +13,7 @@ public class DeletePatientCommandHandler(IPatientRepository patientRepository, I
 {
     public async Task Handle(DeletePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await patientRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
+        var patient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (patient is null) throw new PatientNotFoundException();
 

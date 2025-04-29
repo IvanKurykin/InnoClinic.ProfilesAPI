@@ -12,7 +12,7 @@ public record CreateReceptionistCommand(RequestReceptionistDto Dto) : IRequest<R
 
 public class CreateReceptionistCommandHandler(IReceptionistRepository receptionistRepository, IMapper mapper, IBlobStorageService blobStorageService) : IRequestHandler<CreateReceptionistCommand, ResponseReceptionistDto>
 {
-    public async Task<ResponseReceptionistDto> Handle(CreateReceptionistCommand request, CancellationToken cancellationToken = default)
+    public async Task<ResponseReceptionistDto> Handle(CreateReceptionistCommand request, CancellationToken cancellationToken)
     {
         if (request.Dto is null) throw new DtoIsNullException();
 

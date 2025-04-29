@@ -1,9 +1,11 @@
-﻿using Application.DTO.Doctor;
+﻿using System.Diagnostics.CodeAnalysis;
+using Application.DTO.Doctor;
 using AutoMapper;
 using Domain.Entities;
 
 namespace Application.Mappers;
 
+[ExcludeFromCodeCoverage]
 public class DoctorMapperProfile : Profile
 {
     public DoctorMapperProfile()

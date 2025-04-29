@@ -43,6 +43,7 @@ public class BlobStorageService : IBlobStorageService
 
         return blobClient.Uri.ToString();
     }
+
     public async Task<Stream?> GetPhotoAsync(string blobUrl)
     {
         if (blobUrl is null) throw new BlobUrlIsNullException();
@@ -66,7 +67,7 @@ public class BlobStorageService : IBlobStorageService
         return containerClient.GetBlobClient(blobName);
     }
 
-    private async Task UploadStreamAsync(BlobClient blobClient, Stream stream)
+    private static async Task UploadStreamAsync(BlobClient blobClient, Stream stream)
     {
         await using (stream)
         {

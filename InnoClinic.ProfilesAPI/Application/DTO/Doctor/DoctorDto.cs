@@ -2,6 +2,7 @@
 
 namespace Application.DTO.Doctor;
 
+
 public class DoctorDto
 {
     public string FirstName { get; set; } = string.Empty;

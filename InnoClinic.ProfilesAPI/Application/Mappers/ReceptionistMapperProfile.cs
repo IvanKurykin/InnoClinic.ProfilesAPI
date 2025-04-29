@@ -1,9 +1,11 @@
-﻿using Application.DTO.Receptionist;
+﻿using System.Diagnostics.CodeAnalysis;
+using Application.DTO.Receptionist;
 using AutoMapper;
 using Domain.Entities;
 
 namespace Application.Mappers;
 
+[ExcludeFromCodeCoverage]
 public class ReceptionistMapperProfile : Profile
 {
     public ReceptionistMapperProfile()

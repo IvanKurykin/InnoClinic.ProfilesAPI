@@ -12,7 +12,7 @@ public record CreatePatientCommand(RequestPatientDto Dto) : IRequest<ResponsePat
 
 public class CreatePatientCommandHandler(IPatientRepository patientRepository, IMapper mapper, IBlobStorageService blobStorageService) : IRequestHandler<CreatePatientCommand, ResponsePatientDto>
 {
-    public async Task<ResponsePatientDto> Handle(CreatePatientCommand request, CancellationToken cancellationToken = default)
+    public async Task<ResponsePatientDto> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
     {
         if (request.Dto is null) throw new DtoIsNullException();
 
