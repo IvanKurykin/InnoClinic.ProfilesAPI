@@ -14,7 +14,7 @@ public class UpdateReceptionistCommandHandler(IReceptionistRepository receptioni
 {
     public async Task<ResponseReceptionistDto> Handle(UpdateReceptionistCommand request, CancellationToken cancellationToken)
     {
-        var existingReceptionist = await receptionistRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
+        var existingReceptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingReceptionist is null) throw new ReceptionistNotFoundException();
 

@@ -14,7 +14,7 @@ public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMap
 {
     public async Task<ResponseDoctorDto> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        var existingDoctor = await doctorRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
+        var existingDoctor = await doctorRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (existingDoctor is null) throw new DoctorNotFoundException();
 
