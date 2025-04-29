@@ -8,8 +8,15 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services;
 
-public class BlobStorageService(BlobServiceClient blobServiceClient) : IBlobStorageService
+public class BlobStorageService : IBlobStorageService
 {
+    private readonly BlobServiceClient blobServiceClient;
+
+    public BlobStorageService(BlobServiceClient blobServiceClient)
+    {
+        this.blobServiceClient = blobServiceClient;
+    }
+
     public async Task DeletePhotoAsync(string blobUrl)
     {
         if (blobUrl is null) throw new BlobUrlIsNullException();
@@ -22,13 +29,15 @@ public class BlobStorageService(BlobServiceClient blobServiceClient) : IBlobStor
 
     public async Task<string?> UploadPhotoAsync(IFormFile file)
     { 
-        if (file  is null) throw new FileIsNullException();
+        if (file is null) throw new FileIsNullException();
 
         var containerClient = blobServiceClient.GetBlobContainerClient(BlobConstants.ContainerName);
 
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
-        var blobClient = GetBlobClient(BlobConstants.ContainerName, BlobHelper.GenerateBlobName(file.FileName));
+        var blobName = BlobHelper.GenerateBlobName(file.FileName);
+
+        var blobClient = containerClient.GetBlobClient(blobName);
 
         await UploadStreamAsync(blobClient, file.OpenReadStream());
 

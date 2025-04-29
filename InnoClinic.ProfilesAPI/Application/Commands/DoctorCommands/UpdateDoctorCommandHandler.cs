@@ -1,30 +1,38 @@
 ﻿using Application.DTO.Doctor;
-using Application.Exceptions;
+using Application.Exceptions.NotFoundExceptions;
 using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
 namespace Application.Commands.DoctorCommands;
 
-public record UpdateDoctorCommand(RequestDoctorDto Dto) : IRequest<ResponseDoctorDto>;
+public record UpdateDoctorCommand(Guid Id, RequestDoctorDto Dto) : IRequest<ResponseDoctorDto>;
 
 public class UpdateDoctorCommandHandler(IDoctorRepository doctorRepository, IMapper mapper, IBlobStorageService blobStorageService) : IRequestHandler<UpdateDoctorCommand, ResponseDoctorDto>
 {
     public async Task<ResponseDoctorDto> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        if (request.Dto is null) throw new DtoIsNullException();
+        var existingDoctor = await doctorRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
 
-        var doctor = mapper.Map<Doctor>(request.Dto);
+        if (existingDoctor is null) throw new DoctorNotFoundException();
 
         if (request.Dto.Photo is not null)
         {
             var photoUrl = await blobStorageService.UploadPhotoAsync(request.Dto.Photo);
-            doctor.PhotoUrl = photoUrl;  
+
+            if (!string.IsNullOrEmpty(existingDoctor.PhotoUrl))
+            {
+                await blobStorageService.DeletePhotoAsync(existingDoctor.PhotoUrl);
+            }
+
+            existingDoctor.PhotoUrl = photoUrl;  
         }
 
-        var updatedDoctor = await doctorRepository.UpdateAsync(doctor, cancellationToken);
+        mapper.Map(request.Dto, existingDoctor);
+
+        var updatedDoctor = await doctorRepository.UpdateAsync(existingDoctor, cancellationToken);
 
         return mapper.Map<ResponseDoctorDto>(updatedDoctor);
     }

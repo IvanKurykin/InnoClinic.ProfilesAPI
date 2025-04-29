@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Patient;
 using Application.Exceptions.NotFoundExceptions;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Interfaces;
 using MediatR;
 
@@ -12,7 +13,7 @@ public class GetPatientByIdQueryHandler(IPatientRepository patientRepository, IM
 {
     public async Task<ResponsePatientDto> Handle(GetPatientByIdQuery request, CancellationToken cancellationToken)
     {
-        var patient = await patientRepository.GetByIdAsync(request.Id, cancellationToken);
+        var patient = await patientRepository.GetByIdAsync(request.Id, TrackChanges.UnTrace, cancellationToken);
 
         if (patient is null) throw new PatientNotFoundException();
 

@@ -6,10 +6,10 @@ namespace Application.Mappers;
 
 public class PatientMapperProfile : Profile
 {
-    PatientMapperProfile()
+    public PatientMapperProfile()
     {
         CreateMap<RequestPatientDto, Patient>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.PhotoUrl, opt => opt.Ignore());
 
         CreateMap<Patient, ResponsePatientDto>();
