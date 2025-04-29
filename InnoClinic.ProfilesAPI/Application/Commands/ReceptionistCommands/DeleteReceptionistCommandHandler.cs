@@ -12,7 +12,7 @@ public class DeleteReceptionistCommandHandler(IReceptionistRepository receptioni
 {
     public async Task Handle(DeleteReceptionistCommand request, CancellationToken cancellationToken)
     {
-        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, cancellationToken);
+        var receptionist = await receptionistRepository.GetByIdAsync(request.Id, TrackChanges.Track, cancellationToken);
 
         if (receptionist is null) throw new ReceptionistNotFoundException();
 
