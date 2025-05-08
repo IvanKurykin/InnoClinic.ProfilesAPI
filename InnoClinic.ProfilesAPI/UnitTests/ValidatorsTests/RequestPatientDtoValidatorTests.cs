@@ -12,6 +12,17 @@ public class RequestPatientDtoValidatorTests
     private readonly Mock<IFormFile> _fileMock = new();
 
     [Theory]
+    [InlineData("000cfb18-ca8e-4fdf-8992-32061d9e6ce2", true)]
+    public void AccountIdValidation(string accountId, bool expectedValid)
+    {
+        var dto = new RequestPatientDto { AccountId = Guid.Parse(accountId) };
+        var result = _validator.TestValidate(dto);
+
+        if (expectedValid) result.ShouldNotHaveValidationErrorFor(x => x.AccountId);
+        else result.ShouldHaveValidationErrorFor(x => x.AccountId);
+    }
+
+    [Theory]
     [InlineData(null, true)]
     [InlineData("image.jpg", true)]
     public void PhotoValidation(string? filename, bool expectedValid)

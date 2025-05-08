@@ -10,6 +10,40 @@ public class RequestDoctorDtoValidatorTests
 {
     private readonly RequestDoctorDtoValidator _validator = new();
     private readonly Mock<IFormFile> _fileMock = new();
+    private const string _id = "000cfb18-ca8e-4fdf-8992-32061d9e6ce2";
+
+    [Theory]
+    [InlineData(_id, true)]
+    public void AccountIdValidation(string accountId, bool expectedValid)
+    {
+        var dto = new RequestDoctorDto { AccountId = Guid.Parse(accountId) };
+        var result = _validator.TestValidate(dto);
+
+        if (expectedValid) result.ShouldNotHaveValidationErrorFor(x => x.AccountId);
+        else result.ShouldHaveValidationErrorFor(x => x.AccountId);
+    }
+
+    [Theory]
+    [InlineData(_id, true)]
+    public void OfficeIdValidation(string officeId, bool expectedValid)
+    {
+        var dto = new RequestDoctorDto { OfficeId = Guid.Parse(officeId) };
+        var result = _validator.TestValidate(dto);
+
+        if (expectedValid) result.ShouldNotHaveValidationErrorFor(x => x.OfficeId);
+        else result.ShouldHaveValidationErrorFor(x => x.OfficeId);
+    }
+
+    [Theory]
+    [InlineData(_id, true)]
+    public void SpecializationIdValidation(string specializationId, bool expectedValid)
+    {
+        var dto = new RequestDoctorDto { SpecializationId = Guid.Parse(specializationId) };
+        var result = _validator.TestValidate(dto);
+
+        if (expectedValid) result.ShouldNotHaveValidationErrorFor(x => x.SpecializationId);
+        else result.ShouldHaveValidationErrorFor(x => x.SpecializationId);
+    }
 
     [Theory]
     [InlineData(null, true)]
