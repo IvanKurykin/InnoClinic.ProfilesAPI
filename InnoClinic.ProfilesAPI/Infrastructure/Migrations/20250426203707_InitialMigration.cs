@@ -9,6 +9,7 @@ namespace Infrastructure.Migrations
     /// <inheritdoc />
     
     [ExcludeFromCodeCoverage]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
