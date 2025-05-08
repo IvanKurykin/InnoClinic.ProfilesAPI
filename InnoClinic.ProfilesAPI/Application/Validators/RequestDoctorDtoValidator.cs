@@ -8,8 +8,6 @@ public class RequestDoctorDtoValidator : PersonWithPhotoValidator<RequestDoctorD
 {
     public RequestDoctorDtoValidator()
     {
-        RuleFor(x => x.AccountId).NotEmpty().WithMessage("Account id is required.");
-
         RuleFor(x => x.OfficeId).NotEmpty().WithMessage("Office id is required.");
 
         RuleFor(x => x.SpecializationId).NotEmpty().WithMessage("Specialization id is required.");

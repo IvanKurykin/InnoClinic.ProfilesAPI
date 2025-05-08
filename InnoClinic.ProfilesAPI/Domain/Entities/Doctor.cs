@@ -4,7 +4,6 @@ namespace Domain.Entities;
 
 public sealed class Doctor : Person
 {
-    public Guid AccountId { get; set; }
     public Guid OfficeId { get; set; }
     public Guid SpecializationId { get; set; }
     public required DateTime DateOfBirth { get; set; }

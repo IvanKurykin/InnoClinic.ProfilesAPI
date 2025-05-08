@@ -8,6 +8,9 @@ public abstract class PersonWithPhotoValidator<T> : AbstractValidator<T> where T
 {
     protected PersonWithPhotoValidator()
     {
+        RuleFor(x => ValidationHelper.GetPropertyValue<Guid>(x, "AccountId"))
+            .NotEmpty().WithMessage("Account id is required.");
+
         RuleFor(x => ValidationHelper.GetPropertyValue<string>(x, "FirstName"))
             .NotEmpty().WithMessage("First name is required.")
             .MaximumLength(50).WithMessage("First name cannot exceed 50 characters.");
