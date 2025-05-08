@@ -1,15 +1,10 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-
-    [ExcludeFromCodeCoverage]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public partial class AddIdToDoctorAndReceptionistTables : Migration
     {
         /// <inheritdoc />
